@@ -6,26 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Undangan Pernikahan | {{ $namaPria ?? 'Aiman' }} & {{ $namaWanita ?? 'Fadhillah' }}</title>
 
-  <!-- Library & Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('music', {
+        isPlaying: false,
+        toggle() {
+          const musicEl = document.getElementById('bg-music');
+          if (this.isPlaying) {
+            musicEl.pause();
+          } else {
+            musicEl.play();
+          }
+          this.isPlaying = !this.isPlaying;
+        },
+        playOnOpen() {
+          const musicEl = document.getElementById('bg-music');
+          musicEl.play().then(() => {
+            this.isPlaying = true;
+          }).catch(error => {
+            console.log("Autoplay musik diblokir oleh browser.");
+            this.isPlaying = false;
+          });
+        }
+      });
+    });
+  </script>
+
   <style>
-    /* === TEMA: FLORAL ELEGAN MINIMALIS === */
     :root {
       --bg-color: #FFFFFF;
       --soft-bg: #F9F6F2;
-      /* Beige Hangat */
       --text-color: #5C5450;
       --heading-color: #3D3531;
       --primary-color: #B38B86;
-      /* Dusty Rose */
       --accent-color: #8C9A85;
-      /* Soft Green */
     }
 
     body {
@@ -38,7 +59,6 @@
       font-family: 'Lora', serif;
     }
 
-    /* === Animasi Scroll === */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -51,7 +71,6 @@
       transform: translateY(0);
     }
 
-    /* === Tombol & Komponen Kustom === */
     .btn-primary {
       background-color: var(--primary-color);
       color: white;
@@ -64,7 +83,6 @@
       box-shadow: 0 6px 20px rgba(179, 139, 134, 0.3);
     }
 
-    /* === REVISI 1: Animasi Bunga Jatuh untuk Splash Screen === */
     .petal {
       position: absolute;
       background-color: var(--primary-color);
@@ -83,11 +101,8 @@
 
 <body class="opacity-0" x-data="{ copied: null }">
 
-  <!-- ===== REVISI 1: Layar Pembuka (Splash Screen) dengan Animasi Bunga ===== -->
   <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center text-center p-4 bg-[var(--soft-bg)] overflow-hidden">
-    <!-- Kontainer untuk kelopak bunga -->
     <div class="absolute inset-0 pointer-events-none">
-      <!-- Buat beberapa kelopak dengan ukuran, posisi, dan durasi animasi yang berbeda -->
       <div class="petal" style="width: 15px; height: 10px; left: 10%; animation-duration: 10s; animation-delay: 0s;"></div>
       <div class="petal" style="width: 20px; height: 15px; left: 20%; animation-duration: 8s; animation-delay: 2s;"></div>
       <div class="petal" style="width: 10px; height: 8px; left: 35%; animation-duration: 12s; animation-delay: 4s;"></div>
@@ -96,7 +111,6 @@
       <div class="petal" style="width: 12px; height: 9px; left: 80%; animation-duration: 11s; animation-delay: 5s;"></div>
       <div class="petal" style="width: 22px; height: 16px; left: 90%; animation-duration: 8s; animation-delay: 0.5s;"></div>
     </div>
-
     <div class="relative z-10 text-[var(--heading-color)] reveal active">
       <p class="text-sm tracking-widest">THE WEDDING OF</p>
       <h1 class="text-5xl md:text-6xl font-serif my-4">{{ $namaPria ?? 'Aiman' }} &amp; {{ $namaWanita ?? 'Fadhillah' }}</h1>
@@ -110,11 +124,9 @@
     </div>
   </div>
 
-  <!-- ===== Konten Utama ===== -->
   <main id="main-content" class="hidden relative z-10">
 
-    <!-- === REVISI 2: Section Hero dengan Foto Sementara === -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('/img/foto_utama.jpg');"
+    <section id="hero" class="relative min-h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('/img/foto_utama.jpg');">
       <div class="absolute inset-0 bg-black/30"></div>
       <div class="relative z-10 text-white p-4 reveal">
         <h1 class="text-6xl md:text-8xl font-serif">{{ $namaPria ?? 'Aiman' }} &amp; {{ $namaWanita ?? 'Fadhillah' }}</h1>
@@ -122,16 +134,12 @@
       </div>
     </section>
 
-    <!-- === REVISI 3: Section Mempelai dengan Hiasan === -->
     <section id="couple" class="py-24 px-4 bg-[var(--soft-bg)]">
       <div class="text-center max-w-4xl mx-auto reveal">
         <p class="italic text-lg">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang."</p>
         <p class="font-semibold mt-2">(QS. Ar-Rum: 21)</p>
-
         <div class="grid grid-cols-1 md:grid-cols-2 items-start justify-center gap-12 mt-16">
-          <!-- Mempelai Pria -->
           <div class="flex flex-col items-center reveal">
-            <!-- Bingkai Dekoratif -->
             <div class="relative w-52 h-52">
               <svg class="absolute -top-4 -left-4 w-20 h-20 text-[var(--accent-color)] opacity-50" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-1.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" />
@@ -147,10 +155,7 @@
               <a href="https://www.instagram.com/anastasiayasmeen/" target="_blank" class="text-sm text-[var(--primary-color)] hover:underline mt-1 inline-block"><i class="fa-brands fa-instagram"></i> @instagram_keluarga_pria</a>
             </div>
           </div>
-
-          <!-- Mempelai Wanita -->
           <div class="flex flex-col items-center reveal">
-            <!-- Bingkai Dekoratif -->
             <div class="relative w-52 h-52">
               <svg class="absolute -bottom-4 -right-4 w-20 h-20 text-[var(--accent-color)] opacity-50 transform rotate-180" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-1.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" />
@@ -170,7 +175,6 @@
       </div>
     </section>
 
-    <!-- === Section Acara === -->
     <section id="event" class="py-24 px-4">
       <div class="relative z-10 max-w-4xl mx-auto text-center">
         <h2 class="text-5xl md:text-6xl font-serif reveal text-[var(--heading-color)]">Save The Date</h2>
@@ -189,33 +193,26 @@
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <!-- Akad -->
           <div class="bg-white rounded-lg shadow-lg p-8 reveal">
             <i class="fa-solid fa-gem text-4xl text-[var(--accent-color)] mb-4"></i>
             <h3 class="text-3xl font-serif text-[var(--heading-color)]">Akad Nikah</h3>
             <p class="mt-4 font-semibold text-lg">Sabtu, 10 Agustus 2025</p>
             <p>09:00 WIB - Selesai</p>
             <p class="mt-2 text-gray-600">Masjid Agung, Kota Contoh</p>
-            <a href="https://goo.gl/maps/2Qe4Qw2Qe4Qw2Qe4A" target="_blank" class="btn-primary font-bold py-2 px-6 rounded-full shadow-lg mt-6 inline-block text-sm">
-              <i class="fa-solid fa-location-dot mr-2"></i>Lihat Peta
-            </a>
+            <a href="https://goo.gl/maps/2Qe4Qw2Qe4Qw2Qe4A" target="_blank" class="btn-primary font-bold py-2 px-6 rounded-full shadow-lg mt-6 inline-block text-sm"><i class="fa-solid fa-location-dot mr-2"></i>Lihat Peta</a>
           </div>
-          <!-- Resepsi -->
           <div class="bg-white rounded-lg shadow-lg p-8 reveal">
             <i class="fa-solid fa-champagne-glasses text-4xl text-[var(--accent-color)] mb-4"></i>
             <h3 class="text-3xl font-serif text-[var(--heading-color)]">Resepsi</h3>
             <p class="mt-4 font-semibold text-lg">Sabtu, 10 Agustus 2025</p>
             <p>11:00 - 14:00 WIB</p>
             <p class="mt-2 text-gray-600">Gedung Serbaguna, Kota Contoh</p>
-            <a href="https://goo.gl/maps/2Qe4Qw2Qe4Qw2Qe4A" target="_blank" class="btn-primary font-bold py-2 px-6 rounded-full shadow-lg mt-6 inline-block text-sm">
-              <i class="fa-solid fa-location-dot mr-2"></i>Lihat Peta
-            </a>
+            <a href="https://goo.gl/maps/2Qe4Qw2Qe4Qw2Qe4A" target="_blank" class="btn-primary font-bold py-2 px-6 rounded-full shadow-lg mt-6 inline-block text-sm"><i class="fa-solid fa-location-dot mr-2"></i>Lihat Peta</a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- === Section Galeri === -->
     <section id="gallery" class="py-24 px-4 bg-[var(--soft-bg)]">
       <div class="max-w-6xl mx-auto text-center">
         <h2 class="text-5xl md:text-6xl font-serif reveal text-[var(--heading-color)]">Our Moments</h2>
@@ -230,94 +227,57 @@
       </div>
     </section>
 
-    <!-- === Section Wedding Gift === -->
     <section id="gift" class="py-24 px-4">
       <div class="max-w-2xl mx-auto text-center" x-data="{ tab: 'digital' }">
         <h2 class="text-5xl md:text-6xl font-serif reveal text-[var(--heading-color)]">Wedding Gift</h2>
         <p class="mt-4 text-gray-600 reveal">Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Namun, jika memberi adalah tanda kasih, kami dengan senang hati menerimanya.</p>
-
         <div class="mt-8 reveal">
-          <!-- Tombol Tab -->
           <div class="border-b border-gray-200">
             <nav class="-mb-px flex justify-center gap-6" aria-label="Tabs">
-              <button @click="tab = 'digital'" :class="{ 'border-[var(--primary-color)] text-[var(--primary-color)]': tab === 'digital', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'digital' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                Amplop Digital
-              </button>
-              <button @click="tab = 'fisik'" :class="{ 'border-[var(--primary-color)] text-[var(--primary-color)]': tab === 'fisik', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'fisik' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                Kirim Hadiah
-              </button>
+              <button @click="tab = 'digital'" :class="{ 'border-[var(--primary-color)] text-[var(--primary-color)]': tab === 'digital', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'digital' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Amplop Digital</button>
+              <button @click="tab = 'fisik'" :class="{ 'border-[var(--primary-color)] text-[var(--primary-color)]': tab === 'fisik', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': tab !== 'fisik' }" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Kirim Hadiah</button>
             </nav>
           </div>
         </div>
-
-        <!-- Konten Tab -->
         <div class="mt-8 text-left">
-          <!-- Amplop Digital -->
           <div x-show="tab === 'digital'" x-transition class="space-y-4">
             <div class="bg-white p-4 rounded-lg shadow-sm border">
               <p class="font-semibold">Bank BCA</p>
               <p id="bca-rek" class="text-lg">1234567890</p>
-              <p class="text-sm">a.n. Fadhillah</p>
-              <button @click="copied = 'bca'; navigator.clipboard.writeText('1234567890'); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2">
-                <span x-show="copied !== 'bca'">Salin Rekening</span>
-                <span x-show="copied === 'bca'">Tersalin!</span>
-              </button>
+              <p class="text-sm">a.n. Fadhillah</p><button @click="copied = 'bca'; navigator.clipboard.writeText('1234567890'); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2"><span x-show="copied !== 'bca'">Salin Rekening</span><span x-show="copied === 'bca'">Tersalin!</span></button>
             </div>
             <div class="bg-white p-4 rounded-lg shadow-sm border">
               <p class="font-semibold">DANA / E-Wallet</p>
               <p id="dana-num" class="text-lg">081234567890</p>
-              <p class="text-sm">a.n. Aiman</p>
-              <button @click="copied = 'dana'; navigator.clipboard.writeText('081234567890'); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2">
-                <span x-show="copied !== 'dana'">Salin Nomor</span>
-                <span x-show="copied === 'dana'">Tersalin!</span>
-              </button>
+              <p class="text-sm">a.n. Aiman</p><button @click="copied = 'dana'; navigator.clipboard.writeText('081234567890'); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2"><span x-show="copied !== 'dana'">Salin Nomor</span><span x-show="copied === 'dana'">Tersalin!</span></button>
             </div>
           </div>
-          <!-- Kirim Hadiah -->
           <div x-show="tab === 'fisik'" x-transition class="bg-white p-4 rounded-lg shadow-sm border">
             <p class="font-semibold">Alamat Pengiriman</p>
             <p id="alamat" class="text-sm">Jl. Kenangan Indah No. 10, Komplek Pindad, Bandung, Jawa Barat, 40284</p>
-            <p class="text-sm mt-1">Penerima: Fadhillah / Aiman</p>
-            <button @click="copied = 'alamat'; navigator.clipboard.writeText(document.getElementById('alamat').innerText); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2">
-              <span x-show="copied !== 'alamat'">Salin Alamat</span>
-              <span x-show="copied === 'alamat'">Tersalin!</span>
-            </button>
+            <p class="text-sm mt-1">Penerima: Fadhillah / Aiman</p><button @click="copied = 'alamat'; navigator.clipboard.writeText(document.getElementById('alamat').innerText); setTimeout(() => copied = null, 2000)" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded mt-2"><span x-show="copied !== 'alamat'">Salin Alamat</span><span x-show="copied === 'alamat'">Tersalin!</span></button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- === Section RSVP & Ucapan === -->
     <section id="rsvp" class="py-24 px-4 bg-[var(--soft-bg)]">
       <div class="max-w-2xl mx-auto text-center">
         <h2 class="text-5xl md:text-6xl font-serif reveal text-[var(--heading-color)]">Buku Tamu</h2>
         <p class="mt-4 text-gray-600 reveal">Kirimkan doa dan ucapan terbaik Anda untuk kami.</p>
-
         <div class="bg-white rounded-xl shadow-lg p-8 mt-10 text-left reveal">
           <form id="rsvp-form" method="POST" action="{{ route('rsvp.store') }}">
             @csrf
-            <div class="mb-4">
-              <label for="nama" class="block mb-2 font-semibold">Nama Anda</label>
-              <input type="text" name="nama" placeholder="Tulis nama Anda" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required>
-            </div>
-            <div class="mb-4">
-              <label for="kehadiran" class="block mb-2 font-semibold">Konfirmasi Kehadiran</label>
-              <select name="kehadiran" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required>
+            <div class="mb-4"><label for="nama" class="block mb-2 font-semibold">Nama Anda</label><input type="text" name="nama" placeholder="Tulis nama Anda" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required></div>
+            <div class="mb-4"><label for="kehadiran" class="block mb-2 font-semibold">Konfirmasi Kehadiran</label><select name="kehadiran" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required>
                 <option value="Hadir">Insya Allah, Hadir</option>
                 <option value="Tidak Hadir">Maaf, Berhalangan</option>
-              </select>
-            </div>
-            <div class="mb-4">
-              <label for="ucapan" class="block mb-2 font-semibold">Ucapan & Doa</label>
-              <textarea name="ucapan" placeholder="Tulis ucapan terbaik Anda..." rows="5" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required></textarea>
-            </div>
-            <button type="submit" class="btn-primary w-full font-bold py-3 rounded-full shadow-lg text-lg flex items-center justify-center gap-2">
-              <i class="fa-solid fa-paper-plane"></i> Kirim
-            </button>
+              </select></div>
+            <div class="mb-4"><label for="ucapan" class="block mb-2 font-semibold">Ucapan & Doa</label><textarea name="ucapan" placeholder="Tulis ucapan terbaik Anda..." rows="5" class="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] transition" required></textarea></div>
+            <button type="submit" class="btn-primary w-full font-bold py-3 rounded-full shadow-lg text-lg flex items-center justify-center gap-2"><i class="fa-solid fa-paper-plane"></i> Kirim</button>
             <div id="rsvp-success" class="text-green-600 mt-4 text-center hidden">Terima kasih, ucapan Anda berhasil dikirim!</div>
           </form>
         </div>
-
         <div class="mt-16 reveal">
           <div id="rsvp-list" class="space-y-4 max-h-96 overflow-y-auto p-2 text-left">
             <div class="text-center text-gray-500">Memuat ucapan...</div>
@@ -326,7 +286,6 @@
       </div>
     </section>
 
-    <!-- === Footer === -->
     <footer class="py-16 text-center text-[var(--heading-color)]">
       <div class="relative z-10 reveal">
         <p class="italic">Merupakan suatu kehormatan bagi kami, apabila Anda berkenan hadir untuk memberikan doa restu.</p>
@@ -336,7 +295,6 @@
     </footer>
   </main>
 
-  <!-- REVISI 4: Navigasi Bawah & Tombol Musik yang Diperbaiki -->
   <div id="bottom-nav" class="fixed bottom-0 left-0 right-0 z-40 hidden">
     <div class="max-w-lg mx-auto bg-white/90 backdrop-blur-md rounded-t-2xl shadow-2xl">
       <div class="flex justify-around items-center p-2">
@@ -344,13 +302,15 @@
         <a href="#event" class="text-gray-600 hover:text-[var(--primary-color)] p-2 text-center"><i class="fa-solid fa-calendar-check text-xl"></i><span class="block text-xs">Acara</span></a>
         <a href="#gift" class="text-gray-600 hover:text-[var(--primary-color)] p-2 text-center"><i class="fa-solid fa-gift text-xl"></i><span class="block text-xs">Hadiah</span></a>
         <a href="#rsvp" class="text-gray-600 hover:text-[var(--primary-color)] p-2 text-center"><i class="fa-solid fa-book-open-reader text-xl"></i><span class="block text-xs">Tamu</span></a>
-        <button id="music-btn" class="text-gray-600 hover:text-[var(--primary-color)] p-2 text-center"><i id="music-icon" class="fa-solid fa-volume-off text-xl"></i><span class="block text-xs">Musik</span></button>
+        <button @click="$store.music.toggle()" class="text-gray-600 hover:text-[var(--primary-color)] p-2 text-center">
+          <i class="fa-solid text-xl" :class="$store.music.isPlaying ? 'fa-volume-high' : 'fa-volume-off'"></i>
+          <span class="block text-xs">Musik</span>
+        </button>
       </div>
     </div>
   </div>
   <audio id="bg-music" src="/audio/bg-music.mp3" loop></audio>
 
-  <!-- Lightbox -->
   <div id="lightbox" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 hidden" onclick="closeLightbox()">
     <img id="lightbox-img" src="" class="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg">
   </div>
@@ -361,9 +321,6 @@
       const openButton = document.getElementById('open-invitation');
       const mainContent = document.getElementById('main-content');
       const bottomNav = document.getElementById('bottom-nav');
-      const music = document.getElementById('bg-music');
-      const musicBtn = document.getElementById('music-btn');
-      const musicIcon = document.getElementById('music-icon');
 
       document.body.style.overflow = 'hidden';
       document.body.classList.remove('opacity-0');
@@ -378,23 +335,9 @@
           bottomNav.classList.remove('hidden');
           document.body.style.overflow = 'auto';
 
-          // Coba putar musik dan tangani error jika diblokir
-          music.play().then(() => {
-            musicIcon.classList.replace('fa-volume-off', 'fa-volume-high');
-          }).catch(error => {
-            console.log("Autoplay musik diblokir oleh browser. Perlu interaksi pengguna.");
-          });
+          // Memutar musik menggunakan store Alpine
+          Alpine.store('music').playOnOpen();
         }, 1000);
-      });
-
-      musicBtn.addEventListener('click', () => {
-        if (music.paused) {
-          music.play();
-          musicIcon.classList.replace('fa-volume-off', 'fa-volume-high');
-        } else {
-          music.pause();
-          musicIcon.classList.replace('fa-volume-high', 'fa-volume-off');
-        }
       });
 
       const revealElements = document.querySelectorAll('.reveal');
@@ -414,13 +357,11 @@
       const countdownInterval = setInterval(() => {
         const now = new Date().getTime();
         const distance = eventDate - now;
-
         if (distance > 0) {
           const d = Math.floor(distance / (1000 * 60 * 60 * 24));
           const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           const s = Math.floor((distance % (1000 * 60)) / 1000);
-
           document.getElementById('days').innerText = d < 10 ? '0' + d : d;
           document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
           document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
@@ -437,7 +378,6 @@
         const form = e.target;
         const data = new FormData(form);
         const successMsg = document.getElementById('rsvp-success');
-
         try {
           const res = await fetch(form.action, {
             method: 'POST',
@@ -447,7 +387,6 @@
             },
             body: data
           });
-
           if (res.ok) {
             form.reset();
             successMsg.classList.remove('hidden');
@@ -472,15 +411,7 @@
             if (data.length === 0) {
               listContainer.innerHTML = '<div class="text-center text-gray-500">Jadilah yang pertama mengirim ucapan.</div>';
             } else {
-              listContainer.innerHTML = data.map(u => `
-                                <div class="bg-white p-4 rounded-lg shadow-sm border">
-                                    <div class="flex items-center mb-2">
-                                        <span class="font-bold text-[var(--heading-color)]">${u.nama}</span>
-                                        <span class="ml-2 text-xs font-semibold ${u.kehadiran === 'Hadir' ? 'text-green-800 bg-green-100' : 'text-gray-800 bg-gray-200'} px-2 py-0.5 rounded-full">${u.kehadiran}</span>
-                                    </div>
-                                    <p class="text-gray-600 italic">"${u.ucapan}"</p>
-                                </div>
-                            `).join('');
+              listContainer.innerHTML = data.map(u => `<div class="bg-white p-4 rounded-lg shadow-sm border"><div class="flex items-center mb-2"><span class="font-bold text-[var(--heading-color)]">${u.nama}</span><span class="ml-2 text-xs font-semibold ${u.kehadiran === 'Hadir' ? 'text-green-800 bg-green-100' : 'text-gray-800 bg-gray-200'} px-2 py-0.5 rounded-full">${u.kehadiran}</span></div><p class="text-gray-600 italic">"${u.ucapan}"</p></div>`).join('');
             }
           } else {
             listContainer.innerHTML = '<div class="text-center text-red-500">Gagal memuat ucapan.</div>';
@@ -490,7 +421,6 @@
           listContainer.innerHTML = '<div class="text-center text-red-500">Terjadi kesalahan.</div>';
         }
       }
-
       loadRsvp();
     });
 
